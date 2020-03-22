@@ -12,12 +12,12 @@ class Post extends Model
 
     public function user()
     {
-        return $this->belongdTo(User::tag);
+        return $this->belongdTo(User::class);
     }
 
     public function category()
     {
-        return $this->belongdTo(Category::tag);
+        return $this->belongsTo(Category::class);
     }
     
     public function tags()
