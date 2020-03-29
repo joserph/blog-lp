@@ -3,10 +3,17 @@
 namespace App\Http\Controllers\Admin;
 
 use Illuminate\Http\Request;
+use App\Http\Request\TagStoreRequest;
+use App\Http\Request\TagUpdateRequest;
 use App\Http\Controllers\Controller;
+use App\Tag;
 
 class TagController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
     /**
      * Display a listing of the resource.
      *
@@ -14,7 +21,9 @@ class TagController extends Controller
      */
     public function index()
     {
-        //
+        $tags = Tag::orderBy('id', 'DESC')->paginate();
+
+        return view('admin.tags.index', compact('tags'));
     }
 
     /**
@@ -24,7 +33,7 @@ class TagController extends Controller
      */
     public function create()
     {
-        //
+        return view('admin.tags.create');
     }
 
     /**
@@ -33,9 +42,12 @@ class TagController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(TagStoreRequest $request)
     {
-        //
+        $tag = Tag::create($request->all());
+
+        return redirect()->route('tags.edit', $tag->id)
+            ->with('info', 'Etiqueta creada con exito');
     }
 
     /**
@@ -46,7 +58,9 @@ class TagController extends Controller
      */
     public function show($id)
     {
-        //
+        $tag = Tag::find($id);
+
+        return view('admin.tags.show', compact('tag'));
     }
 
     /**
@@ -57,7 +71,9 @@ class TagController extends Controller
      */
     public function edit($id)
     {
-        //
+        $tag = Tag::find($id);
+
+        return view('admin.tags.edit', compact('tag'));
     }
 
     /**
@@ -67,9 +83,14 @@ class TagController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(TagUpdateRequest $request, $id)
     {
-        //
+        $tag = Tag::find($id);
+
+        $tag->fill($request->all())->save();
+
+        return redirect()->route('tags.edit', $tag->id)
+            ->with('info', 'Etiqueta actualizada con exito');
     }
 
     /**
@@ -80,6 +101,10 @@ class TagController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $tag = Tag::find($id);
+
+        $tag->delete();
+
+        return back()->with('info', $tag->name . ' Eliminado correctamente');
     }
 }
