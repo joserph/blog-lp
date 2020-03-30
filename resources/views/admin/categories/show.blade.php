@@ -6,15 +6,12 @@
             <div class="col-md-8 col-md-offset-2">
                 <div class="panel panel-default">
                     <div class="panel-heading">
-                        Editar Eiqueta
+                        Ver Categoria
                     </div>
                     <div class="panel-body">
-                        {!! Form::model($tag, ['route' => ['tags.update', $tag->id],
-                        'method' => 'PUT']) !!}
-
-                            @include('admin.tags.partials.form')
-                            
-                        {!! Form::close() !!}
+                        <p><strong>Nombre: </strong>{{ $category->name }}</p>
+                        <p><strong>Slug: </strong>{{ $category->slug }}</p>
+                        <p><strong>Contenido: </strong>{{ $category->body }}</p>
                     </div>
                 </div>
             </div>
